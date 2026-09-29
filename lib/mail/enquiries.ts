@@ -3,6 +3,7 @@ import "server-only";
 import { Resend } from "resend";
 
 import type { AdminEnquiry } from "@/types/enquiry";
+import { websiteEmail } from "@/lib/mail/template";
 
 type NotificationOptions = {
   enquiry: AdminEnquiry;
@@ -41,6 +42,28 @@ Submitted: ${new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: 
 Source: Website quote form${link}`.trim();
 }
 
+function enquiryEmailDetails(enquiry: AdminEnquiry) {
+  return [
+    { label: "Contact person", value: enquiry.contactPerson },
+    { label: "Company / firm", value: value(enquiry.companyName) },
+    { label: "Phone", value: enquiry.phone },
+    { label: "Email", value: value(enquiry.email) },
+    { label: "Coal requirement", value: enquiry.coalRequirement },
+    { label: "Grade / GCV", value: value(enquiry.gradeGcv) },
+    { label: "Size", value: value(enquiry.size) },
+    { label: "Quantity", value: `${enquiry.quantity} ${enquiry.unit}` },
+    { label: "Frequency", value: enquiry.requirementFrequency },
+    { label: "Delivery location", value: `${enquiry.deliveryCity}, ${enquiry.state}${enquiry.pincode ? ` (${enquiry.pincode})` : ""}` },
+    { label: "Timeline", value: value(enquiry.timeline) },
+    { label: "Additional requirement", value: value(enquiry.message) },
+  ];
+}
+
+function normalizedAppUrl(appUrl?: string) {
+  const base = appUrl?.replace(/\/$/, "");
+  return base && /^https?:\/\//.test(base) ? base : undefined;
+}
+
 /**
  * Delivery is deliberately isolated from enquiry persistence. A mail outage
  * must never turn a successfully stored commercial requirement into a failure
@@ -58,12 +81,21 @@ export async function sendEnquiryNotifications({ enquiry, recipientEmail, appUrl
 
   const resend = new Resend(process.env.RESEND_API_KEY!);
   const from = process.env.RESEND_FROM_EMAIL!;
+  const baseUrl = normalizedAppUrl(appUrl);
   const adminResult = await resend.emails.send({
     from,
     to: [recipientEmail],
     replyTo: enquiry.email || undefined,
     subject: `New Quote Enquiry — ${subjectValue(enquiry.companyName ?? enquiry.contactPerson)}`,
     text: enquiryDetails(enquiry, appUrl),
+    html: websiteEmail({
+      eyebrow: "New quote enquiry",
+      title: "A new requirement is ready for review.",
+      intro: "The enquiry details are below. Review the requirement and respond directly when ready.",
+      details: enquiryEmailDetails(enquiry),
+      cta: baseUrl ? { label: "Open enquiry in admin", href: `${baseUrl}/admin/enquiries/${enquiry.id}` } : undefined,
+      note: `Submitted ${new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kolkata" }).format(new Date(enquiry.submittedAt))} IST.`,
+    }),
   }, { idempotencyKey: `star-energies-enquiry-admin/${enquiry.id}` });
 
   if (adminResult.error) throw new Error(`Admin enquiry email was rejected: ${adminResult.error.message}`);
@@ -83,6 +115,13 @@ Submitting this form does not confirm pricing, material availability, supply, de
 
 Regards,
 Star Energies`,
+    html: websiteEmail({
+      eyebrow: "Requirement received",
+      title: "Your requirement is with us.",
+      intro: `Hello ${enquiry.contactPerson},\n\nThank you for sharing your coal requirement with Star Energies. We have received it and will contact you to discuss availability and quotation.`,
+      cta: baseUrl ? { label: "Visit Star Energies", href: baseUrl } : undefined,
+      note: "Submitting this form does not confirm pricing, material availability, supply, delivery or commercial terms. Those details will be discussed directly.",
+    }),
   }, { idempotencyKey: `star-energies-enquiry-acknowledgement/${enquiry.id}` });
 
   if (acknowledgement.error) throw new Error(`Customer acknowledgement email was rejected: ${acknowledgement.error.message}`);
