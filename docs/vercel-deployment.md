@@ -20,13 +20,14 @@ Add these in Vercel → Project → Settings → Environment Variables before th
 | `BETTER_AUTH_URL` | Canonical HTTPS production URL, with no trailing slash. |
 | `NEXT_PUBLIC_APP_URL` | The same canonical HTTPS production URL. This is public by design. |
 | `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` | Stable random 32-byte base64 value. Keep it unchanged across deployments. |
+| `ADMIN_ONBOARDING_EMAIL` | Owner inbox that receives the one-time first-admin verification code. |
 | `CLOUDINARY_CLOUD_NAME` | Star Energies Cloudinary cloud name. |
 | `CLOUDINARY_API_KEY` | Cloudinary API key. |
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret; server-side only. |
 | `RESEND_API_KEY` | Resend API key, when email notification is enabled. |
 | `RESEND_FROM_EMAIL` | Verified Resend sender, e.g. `Star Energies <enquiries@example.com>`. |
 
-Never add `DATABASE_URL`, `BETTER_AUTH_SECRET`, `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY`, `CLOUDINARY_API_SECRET`, or `RESEND_API_KEY` with a `NEXT_PUBLIC_` prefix.
+Never add `DATABASE_URL`, `BETTER_AUTH_SECRET`, `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY`, `CLOUDINARY_API_SECRET`, or `RESEND_API_KEY` with a `NEXT_PUBLIC_` prefix. The onboarding verification code is sent using the configured Resend sender to `ADMIN_ONBOARDING_EMAIL`; no inbound-email or Gmail API configuration is needed.
 
 For Preview deployments, copy the Neon/Cloudinary values only when the preview needs CMS or media testing. Keep the production auth URLs canonical unless a dedicated preview domain and corresponding Better Auth configuration have been deliberately set up; previews do not need to become an alternate production admin surface.
 
