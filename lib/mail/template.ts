@@ -46,10 +46,19 @@ function actionButton(cta?: WebsiteEmailOptions["cta"]) {
   </table>`;
 }
 
+function websiteUrl() {
+  const configured = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/+$/, "");
+  // Email recipients need a public, HTTPS-hosted image. Localhost URLs cannot
+  // be reached by their mail client during local development.
+  return configured && /^https:\/\//i.test(configured) ? configured : "https://starenergies.in";
+}
+
 /** A table-based email shell that follows the public site's ink, paper and amber visual system. */
 export function websiteEmail({ eyebrow, title, intro, details = [], code, note, cta }: WebsiteEmailOptions) {
   const codeBlock = code ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0 0;border:1px solid #bb803c;background:#171816;"><tr><td align="center" style="padding:22px;color:#d8b071;font-family:Arial,Helvetica,sans-serif;font-size:28px;font-weight:700;letter-spacing:9px;line-height:1;">${escapeHtml(code)}</td></tr></table>` : "";
   const noteBlock = note ? `<p style="margin:24px 0 0;color:#6c6d66;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;">${textBlock(note)}</p>` : "";
+  const siteUrl = websiteUrl();
+  const logoUrl = `${siteUrl}/images/logo/star-full-256.png`;
 
   return `<!doctype html>
 <html lang="en">
@@ -59,7 +68,10 @@ export function websiteEmail({ eyebrow, title, intro, details = [], code, note, 
       <tr><td align="center" style="padding:32px 16px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:620px;background:#faf9f5;">
           <tr><td style="padding:24px 32px;background:#171816;border-bottom:3px solid #bb803c;">
-            <span style="color:#d8b071;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:1;vertical-align:middle;">✦</span><span style="margin-left:10px;color:#faf9f5;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;line-height:1;vertical-align:middle;">STAR <span style="font-weight:400;">ENERGIES</span></span>
+            <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+              <td valign="middle" style="padding:0 12px 0 0;"><a href="${escapeHtml(siteUrl)}" style="text-decoration:none;"><img src="${escapeHtml(logoUrl)}" width="48" height="48" alt="Star Energies" border="0" style="display:block;width:48px;height:48px;border:0;outline:none;text-decoration:none;" /></a></td>
+              <td valign="middle" style="padding:0;"><span style="color:#faf9f5;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;line-height:1;">STAR <span style="font-weight:400;">ENERGIES</span></span></td>
+            </tr></table>
           </td></tr>
           <tr><td style="padding:38px 32px 34px;">
             <p style="margin:0 0 17px;color:#bb803c;font-family:Arial,Helvetica,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.3px;line-height:1.4;text-transform:uppercase;">${escapeHtml(eyebrow)}</p>
