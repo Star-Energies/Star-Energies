@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Arrow } from "@/components/arrow";
 import { routes } from "@/content/routes";
 import { getSiteSettings } from "@/lib/content";
+
+export const metadata: Metadata = {
+  robots: { index: false },
+};
 
 export default async function NotFound() {
   const siteSettings = await getSiteSettings();
