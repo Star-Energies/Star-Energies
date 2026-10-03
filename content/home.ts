@@ -7,7 +7,7 @@ import type { HomePageContent } from "@/types/content";
 export const homePage = {
   seo: {
     title: "Star Energies | Industrial Coal, Sourced to Requirement",
-    description: "Requirement-led industrial coal sourcing and supply from Wani, Maharashtra.",
+    description: "Requirement-led industrial coal sourcing and supply across Wani, Chandrapur and Nagpur, Maharashtra.",
     canonicalPath: routes.home,
   },
   hero: {
@@ -18,7 +18,7 @@ export const homePage = {
       { text: "Sourced to Requirement.", emphasis: true },
     ],
     primaryCTA: { label: "Request a Quote", href: "#enquire", intent: "quote" },
-    secondaryCTA: { label: "WhatsApp or call", href: siteSettings.contact.whatsappHref, intent: "whatsapp", external: true },
+    secondaryCTA: { label: "WhatsApp or text", href: siteSettings.contact.whatsappHref, intent: "whatsapp", external: true },
     media: mediaById["hero-development-plate"],
     sceneCaption: "COAL / STOCKING YARD",
     sceneScale: "01 — 04",
@@ -91,12 +91,12 @@ export const homePage = {
     footLabels: ["INDUSTRIAL COAL USERS", "APPLICATION-SPECIFIC DISCUSSION WELCOME"],
   },
   coverage: {
-    label: "Operating ambition / 07",
-    heading: "Connected to industrial demand beyond one region.",
-    body: "Current industry experience includes Maharashtra, Telangana / Hyderabad, Andhra Pradesh / Visakhapatnam, Karnataka and Gujarat.",
-    qualification: `${commercialInformation.panIndiaQualification} The diagram reflects experience and operating ambition—not office locations.`,
-    mapNote: "REGIONAL INDUSTRY EXPERIENCE",
-    regionIds: ["maharashtra", "telangana-hyderabad", "andhra-visakhapatnam", "karnataka", "gujarat"],
+    label: "Locations / 07",
+    heading: "Three locations. One operating network.",
+    body: "Star Energies is connected across Wani, Chandrapur and Nagpur in Maharashtra.",
+    qualification: `${commercialInformation.panIndiaQualification} The diagram shows the three locations connected through the operating network.`,
+    mapNote: "WANI · CHANDRAPUR · NAGPUR",
+    regionIds: ["wani", "chandrapur", "nagpur"],
   },
   facility: {
     label: "Operations / 08",

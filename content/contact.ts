@@ -5,15 +5,15 @@ import type { ContactPageContent } from "@/types/content";
 export const contactPage = {
   seo: {
     title: "Contact | Star Energies",
-    description: "Discuss an industrial coal requirement with Star Energies in Wani, Maharashtra.",
+    description: "Discuss an industrial coal requirement with Star Energies across Wani, Chandrapur and Nagpur.",
     canonicalPath: routes.contact,
   },
   opening: {
     label: "Contact / 01",
     heading: [{ text: "A serious requirement", breakAfter: true }, { text: "deserves a direct line.", emphasis: true }],
     body: "Call, WhatsApp or email Star Energies. If a quote form is useful, use the structured brief below.",
-    channelLabels: ["PHONE", "WHATSAPP", "EMAIL"],
-    whatsappLabel: "Start a conversation",
+    channelLabels: ["CALL / ENQUIRIES", "WHATSAPP / TEXT", "EMAIL"],
+    whatsappLabel: siteSettings.contact.secondaryPhoneDisplay,
   },
   formIntro: {
     label: "Request a quote / 02",

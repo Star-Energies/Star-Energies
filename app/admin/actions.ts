@@ -71,6 +71,25 @@ function errorResult(error: unknown): AdminActionResult {
   return { ok: false, message: "We could not save that change. Please try again." };
 }
 
+function displayPhoneNumber(digits: string) {
+  if (digits.startsWith("91") && digits.length === 12) return `+91 ${digits.slice(2, 7)} ${digits.slice(7)}`;
+  return `+${digits}`;
+}
+
+function syncWhatsAppContact(settings: SiteSettings): SiteSettings {
+  const digits = settings.contact.whatsappHref.match(/\d{10,15}(?!.*\d)/)?.[0];
+  if (!digits) return settings;
+
+  return {
+    ...settings,
+    contact: {
+      ...settings.contact,
+      secondaryPhoneDisplay: displayPhoneNumber(digits),
+      secondaryPhoneHref: `tel:+${digits}`,
+    },
+  };
+}
+
 function invalidate(tags: readonly string[], paths: readonly string[]) {
   tags.forEach((tag) => revalidateTag(tag, "max"));
   paths.forEach((path) => revalidatePath(path));
@@ -300,7 +319,7 @@ export async function saveCoverageRegionAction(input: unknown): Promise<AdminAct
 export async function saveSiteSettingsAction(input: unknown): Promise<AdminActionResult> {
   try {
     await requireAdmin();
-    const settings = siteSettingsSchema.parse(input) as SiteSettings;
+    const settings = syncWhatsAppContact(siteSettingsSchema.parse(input) as SiteSettings);
     await getDatabase().insert(siteSettings).values({ id: "star-energies", content: settings, updatedAt: new Date() }).onConflictDoUpdate({ target: siteSettings.id, set: { content: settings, updatedAt: new Date() } });
     invalidate(["site-settings"], ["/"]);
     return { ok: true, message: "Site settings saved." };

@@ -19,7 +19,7 @@ export const aboutPage = {
     experiencePrefix: "APPROX.",
     experienceValue: "25",
     experienceLabel: "YEARS OF COAL-INDUSTRY EXPERIENCE BEHIND THE VENTURE",
-    footLabels: ["INDEPENDENT STAR ENERGIES BRAND", "WANI, YAVATMAL / MAHARASHTRA"],
+    footLabels: ["INDEPENDENT STAR ENERGIES BRAND", "WANI · CHANDRAPUR · NAGPUR / MAHARASHTRA"],
   },
   distinction: {
     label: "Perspective / 02",

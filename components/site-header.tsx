@@ -125,8 +125,8 @@ export function SiteHeader({ navigation, brandName, quoteCTA, contact }: SiteHea
         <div className="mobile-menu__secondary">
           <Link className="button button--amber" href={quoteCTA.href} onClick={closeMenu}>{quoteCTA.label} <span>↗</span></Link>
           <div className="mobile-menu__contacts" aria-label="Direct contact">
-            <a href={contact.phoneHref} onClick={closeMenu}>Call</a>
-            <a href={contact.whatsappHref} onClick={closeMenu}>WhatsApp</a>
+            <a href={contact.phoneHref} onClick={closeMenu}>Call / enquiry</a>
+            <a href={contact.whatsappHref} onClick={closeMenu}>WhatsApp / text</a>
             <a href={contact.emailHref} onClick={closeMenu}>Email</a>
           </div>
         </div>

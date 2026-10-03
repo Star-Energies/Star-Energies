@@ -22,8 +22,8 @@ export function Footer({ siteSettings }: { siteSettings: SiteSettings }) {
         </div>
         <address className="footer__contact">
           <span className="eyebrow">Start a requirement</span>
-          <a href={siteSettings.contact.phoneHref}>{siteSettings.contact.phoneDisplay}</a>
-          <a href={siteSettings.contact.whatsappHref}>WhatsApp</a>
+          <a href={siteSettings.contact.phoneHref}>Call / enquiries: {siteSettings.contact.phoneDisplay}</a>
+          <a href={siteSettings.contact.whatsappHref}>WhatsApp / text: {siteSettings.contact.secondaryPhoneDisplay}</a>
           <a href={siteSettings.contact.emailHref}>{siteSettings.contact.email}</a>
           <p>{siteSettings.address.display}</p>
         </address>

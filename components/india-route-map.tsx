@@ -43,6 +43,26 @@ const KNOWN_REGION_HUBS: Record<string, Omit<HubNode, "id">> = {
     labelDx: -108,
     labelDy: 4,
   },
+  "chandrapur": {
+    x: 252,
+    y: 423,
+    label: "CHANDRAPUR",
+    sub: "Maharashtra",
+    stateId: "mh",
+    bend: 0.16,
+    labelDx: 15,
+    labelDy: 16,
+  },
+  "nagpur": {
+    x: 240,
+    y: 388,
+    label: "NAGPUR",
+    sub: "Maharashtra",
+    stateId: "mh",
+    bend: -0.14,
+    labelDx: 16,
+    labelDy: -7,
+  },
   "telangana-hyderabad": {
     x: 228,
     y: 462,
@@ -108,7 +128,7 @@ export function IndiaRouteMap({
   note,
   ariaLabel = "Real geographic map of India showing operating supply routes and dispatch corridors from Wani",
 }: IndiaRouteMapProps) {
-  // Origin Hub: Wani, Yavatmal, Maharashtra (approx 20.06° N, 78.95° E)
+  // Origin hub: Wani, Maharashtra (approx. 20.06° N, 78.95° E)
   const originNode = { x: 232, y: 418, name: origin.toUpperCase() };
 
   // Resolve target nodes from coverage regions data
@@ -116,6 +136,9 @@ export function IndiaRouteMap({
   const activeStateIds = new Set<string>(["mh"]); // Origin state Maharashtra always active
 
   regions.forEach((region) => {
+    // Wani is already rendered as the central origin hub.
+    if (region.id === "wani") return;
+
     const known = KNOWN_REGION_HUBS[region.id];
     if (known) {
       activeStateIds.add(known.stateId);

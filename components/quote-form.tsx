@@ -213,7 +213,7 @@ export function QuoteForm({ content, directContact }: { content: QuoteFormConten
       <div className="quote-form__submit">
         <button className="button button--dark" type="submit" disabled={status === "submitting" || !canShowRequirement}>{status === "submitting" ? "Sending enquiry" : submitLabel} <Arrow diagonal /></button>
         {!canShowRequirement && <p className="quote-form__progress-note" aria-live="polite">Select your company type and role to continue.</p>}
-        {status !== "idle" && <div className={`quote-form__status quote-form__status--${status}`} role={status === "error" ? "alert" : "status"} aria-live="polite"><p>{message}</p>{status === "success" && <div className="quote-form__direct-contact"><a href={directContact.phoneHref}>Call</a><a href={directContact.whatsappHref}>WhatsApp</a><a href={directContact.emailHref}>Email</a></div>}</div>}
+        {status !== "idle" && <div className={`quote-form__status quote-form__status--${status}`} role={status === "error" ? "alert" : "status"} aria-live="polite"><p>{message}</p>{status === "success" && <div className="quote-form__direct-contact"><a href={directContact.phoneHref}>Call / enquiry</a><a href={directContact.whatsappHref}>WhatsApp / text</a><a href={directContact.emailHref}>Email</a></div>}</div>}
       </div>
       <p className="quote-form__privacy">By sending this enquiry, you agree that Star Energies may use the submitted information to respond to your requirement. <Link href="/privacy">Privacy</Link></p>
     </form>

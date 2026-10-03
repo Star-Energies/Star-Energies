@@ -86,6 +86,8 @@ export const siteSettingsSchema = z.object({
   contact: z.object({
     phoneDisplay: z.string().min(8).max(30),
     phoneHref: z.string().startsWith("tel:"),
+    secondaryPhoneDisplay: z.string().min(8).max(30),
+    secondaryPhoneHref: z.string().startsWith("tel:"),
     whatsappHref: z.string().url(),
     email: z.string().email(),
     emailHref: z.string().startsWith("mailto:"),

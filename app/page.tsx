@@ -26,7 +26,7 @@ function RouteDiagram({ regions, note }: { regions: readonly CoverageRegion[]; n
       regions={regions}
       origin="Wani"
       note={note}
-      ariaLabel="Operating experience connecting Wani with industrial regions across India"
+      ariaLabel="Map showing Star Energies locations in Wani, Chandrapur and Nagpur"
     />
   );
 }
