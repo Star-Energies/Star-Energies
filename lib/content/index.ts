@@ -67,6 +67,10 @@ type PageContent =
   | ContactPageContent
   | PrivacyPageContent;
 
+// `unstable_cache` persists across deployments. Bump this only when a direct
+// CMS migration needs every deployed instance to fetch new published records.
+const CMS_CACHE_VERSION = "2026-10-03-contact-locations";
+
 async function authorizeAdminRead() {
   const { requireAdmin } = await import("@/lib/auth");
   return requireAdmin();
@@ -239,7 +243,7 @@ const getCachedSiteSettings = unstable_cache(
     if (!record) throw unavailableContentError("Site settings");
     return siteSettingsSchema.parse(record.content);
   },
-  ["site-settings"],
+  ["site-settings", CMS_CACHE_VERSION],
   { tags: ["site-settings"] },
 );
 
@@ -267,7 +271,7 @@ const getCachedCapabilities = unstable_cache(
 const getCachedCoverageRegions = unstable_cache(
   async () =>
     (await getDatabase().select().from(coverageRegionRecords).where(eq(coverageRegionRecords.active, true)).orderBy(asc(coverageRegionRecords.displayOrder))).map(toCoverageRegion),
-  ["coverage-regions"],
+  ["coverage-regions", CMS_CACHE_VERSION],
   { tags: ["coverage"] },
 );
 
@@ -321,7 +325,7 @@ async function getPublishedPageDocument<T extends PageContent>(page: PageKey): P
 }
 
 function cachedPage<T extends PageContent>(page: PageKey, tags: string[]) {
-  return unstable_cache(() => getPublishedPageDocument<T>(page), [`published-${page}-page`], { tags });
+  return unstable_cache(() => getPublishedPageDocument<T>(page), [`published-${page}-page`, CMS_CACHE_VERSION], { tags });
 }
 
 const getCachedHomePage = cachedPage<HomePageContent>("home", ["home", "media"]);
