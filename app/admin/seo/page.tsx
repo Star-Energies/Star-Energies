@@ -1,7 +1,9 @@
 import { SeoManager, type SeoPage } from "@/components/admin/admin-management";
 import { getAdminPageContent } from "@/lib/content";
+import { requireAdminPage } from "@/lib/auth";
 
 export default async function AdminSeoPage() {
+  await requireAdminPage();
   const [home, about, coal, industries, capabilities, operations, contact] = await Promise.all([
     getAdminPageContent("home"), getAdminPageContent("about"), getAdminPageContent("coal"), getAdminPageContent("industries"), getAdminPageContent("capabilities"), getAdminPageContent("operations"), getAdminPageContent("contact"),
   ]);

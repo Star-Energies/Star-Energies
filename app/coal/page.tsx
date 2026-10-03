@@ -8,7 +8,7 @@ import { createMetadata } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
-  return createMetadata((await getCoalPage()).content.seo);
+  return createMetadata((await getCoalPage()).content.seo, "/coal");
 }
 
 export default async function CoalPage() {

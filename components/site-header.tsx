@@ -24,6 +24,8 @@ export function SiteHeader({ navigation, brandName, quoteCTA, contact }: SiteHea
   const hasLightOpening = [routes.coal, routes.contact, routes.privacy].includes(pathname);
   const closeMenu = () => setOpen(false);
 
+  useEffect(() => setOpen(false), [pathname]);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
@@ -35,7 +37,14 @@ export function SiteHeader({ navigation, brandName, quoteCTA, contact }: SiteHea
     if (!open) return;
 
     const previouslyFocused = document.activeElement as HTMLElement | null;
-    const previousOverflow = document.body.style.overflow;
+    const scrollY = window.scrollY;
+    const openedPathname = window.location.pathname;
+    const previousBodyStyle = {
+      overflow: document.body.style.overflow,
+      position: document.body.style.position,
+      top: document.body.style.top,
+      width: document.body.style.width,
+    };
     const inertElements = [
       document.querySelector("main"),
       document.querySelector(".footer"),
@@ -43,6 +52,9 @@ export function SiteHeader({ navigation, brandName, quoteCTA, contact }: SiteHea
     ].filter((element): element is HTMLElement => element instanceof HTMLElement);
 
     document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
     document.documentElement.classList.add("mobile-nav-open");
     inertElements.forEach((element) => { element.inert = true; });
     requestAnimationFrame(() => closeRef.current?.focus());
@@ -73,11 +85,20 @@ export function SiteHeader({ navigation, brandName, quoteCTA, contact }: SiteHea
 
     window.addEventListener("keydown", onKeyDown);
     return () => {
-      document.body.style.overflow = previousOverflow;
+      document.body.style.overflow = previousBodyStyle.overflow;
+      document.body.style.position = previousBodyStyle.position;
+      document.body.style.top = previousBodyStyle.top;
+      document.body.style.width = previousBodyStyle.width;
       document.documentElement.classList.remove("mobile-nav-open");
       inertElements.forEach((element) => { element.inert = false; });
       window.removeEventListener("keydown", onKeyDown);
-      previouslyFocused?.focus();
+      if (window.location.pathname === openedPathname) {
+        const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+        document.documentElement.style.scrollBehavior = "auto";
+        window.scrollTo(0, scrollY);
+        document.documentElement.style.scrollBehavior = previousScrollBehavior;
+      }
+      (previouslyFocused?.isConnected ? previouslyFocused : triggerRef.current)?.focus();
     };
   }, [open]);
 
@@ -102,7 +123,7 @@ export function SiteHeader({ navigation, brandName, quoteCTA, contact }: SiteHea
           aria-controls="mobile-navigation"
           onClick={() => setOpen(true)}
         >
-          <i /><i />
+          <span aria-hidden="true">Menu</span><span className="menu-toggle__lines" aria-hidden="true"><i /><i /></span>
         </button>
       </div>
       <div ref={menuRef} id="mobile-navigation" className={`mobile-menu ${open ? "mobile-menu--open" : ""}`} role="dialog" aria-modal="true" aria-labelledby="mobile-navigation-title" aria-hidden={!open}>

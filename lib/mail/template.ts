@@ -1,5 +1,7 @@
 import "server-only";
 
+import { getSiteUrl } from "@/lib/site-url";
+
 type EmailDetail = {
   label: string;
   value: string;
@@ -46,18 +48,11 @@ function actionButton(cta?: WebsiteEmailOptions["cta"]) {
   </table>`;
 }
 
-function websiteUrl() {
-  const configured = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/+$/, "");
-  // Email recipients need a public, HTTPS-hosted image. Localhost URLs cannot
-  // be reached by their mail client during local development.
-  return configured && /^https:\/\//i.test(configured) ? configured : "https://starenergies.in";
-}
-
 /** A table-based email shell that follows the public site's ink, paper and amber visual system. */
 export function websiteEmail({ eyebrow, title, intro, details = [], code, note, cta }: WebsiteEmailOptions) {
   const codeBlock = code ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0 0;border:1px solid #bb803c;background:#171816;"><tr><td align="center" style="padding:22px;color:#d8b071;font-family:Arial,Helvetica,sans-serif;font-size:28px;font-weight:700;letter-spacing:9px;line-height:1;">${escapeHtml(code)}</td></tr></table>` : "";
   const noteBlock = note ? `<p style="margin:24px 0 0;color:#6c6d66;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;">${textBlock(note)}</p>` : "";
-  const siteUrl = websiteUrl();
+  const siteUrl = getSiteUrl();
   const logoUrl = `${siteUrl}/images/logo/star-full-256.png`;
 
   return `<!doctype html>

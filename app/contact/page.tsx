@@ -8,7 +8,7 @@ import { createMetadata } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
-  return createMetadata((await getContactPage()).content.seo);
+  return createMetadata((await getContactPage()).content.seo, "/contact");
 }
 
 export default async function ContactPage() {

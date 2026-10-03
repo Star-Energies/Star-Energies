@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Arrow } from "./arrow";
 import {
   companyNameTreatment,
@@ -18,6 +18,21 @@ type DirectContact = { phoneHref: string; whatsappHref: string; emailHref: strin
 
 const newSubmissionId = () => crypto.randomUUID();
 const labReportTypes = "application/pdf,image/jpeg,image/png";
+
+const clientFieldMessages: Record<string, string> = {
+  contactPerson: "Enter the contact person's name.",
+  companyType: "Select a company type.",
+  role: "Select your role.",
+  companyName: "Enter the company or firm name.",
+  phone: "Enter a valid phone number.",
+  email: "Enter a valid email address.",
+  coalRequirement: "Tell us the coal requirement or type.",
+  quantity: "Enter the quantity required.",
+  unit: "Select a unit.",
+  requirementFrequency: "Select one-time or regular.",
+  deliveryCity: "Enter the delivery city.",
+  state: "Enter the delivery state.",
+};
 
 function Field({ name, label, required, optional, error, children, wide = false }: {
   name: string;
@@ -50,6 +65,20 @@ export function QuoteForm({ content, directContact }: { content: QuoteFormConten
   const [formStartedAt, setFormStartedAt] = useState(() => Date.now());
   const [companyType, setCompanyType] = useState<EnquiryCompanyType | "">("");
   const [role, setRole] = useState<EnquiryRole | "">("");
+  const formRef = useRef<HTMLFormElement>(null);
+  const confirmationRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    if (status !== "success") return;
+    confirmationRef.current?.focus({ preventScroll: true });
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    formRef.current?.scrollIntoView({ block: "start", behavior: reducedMotion ? "instant" : "smooth" });
+  }, [status]);
+
+  useEffect(() => {
+    if (status !== "error" || Object.keys(fieldErrors).length === 0) return;
+    formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+  }, [status, fieldErrors]);
 
   const roles = useMemo(() => rolesForCompanyType(companyType), [companyType]);
   const companyNameRule = companyType && role ? companyNameTreatment(companyType, role) : "hidden";
@@ -88,9 +117,14 @@ export function QuoteForm({ content, directContact }: { content: QuoteFormConten
     setFieldErrors({});
 
     if (!formElement.checkValidity()) {
+      const errors: Record<string, string> = {};
+      for (const control of Array.from(formElement.elements)) {
+        if (!(control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement)) continue;
+        if (control.name && !control.validity.valid) errors[control.name] = clientFieldMessages[control.name] ?? control.validationMessage;
+      }
+      setFieldErrors(errors);
       setMessage(content.validationMessages.incomplete);
       setStatus("error");
-      formElement.reportValidity();
       return;
     }
 
@@ -130,7 +164,14 @@ export function QuoteForm({ content, directContact }: { content: QuoteFormConten
   }
 
   return (
-    <form className="quote-form" onSubmit={handleSubmit} noValidate>
+    <form className="quote-form" ref={formRef} onSubmit={handleSubmit} noValidate>
+      {status === "success" ? <div className="quote-form__confirmation" role="status" aria-live="polite">
+        <span className="quote-form__confirmation-label">ENQUIRY / RECEIVED</span>
+        <h3 ref={confirmationRef} tabIndex={-1}>Your requirement is with us.</h3>
+        <p>{message}</p>
+        <div className="quote-form__confirmation-contact"><a href={directContact.phoneHref}>Call <Arrow diagonal /></a><a href={directContact.whatsappHref}>WhatsApp <Arrow diagonal /></a><a href={directContact.emailHref}>Email <Arrow diagonal /></a></div>
+        <button className="quote-form__another" type="button" onClick={() => { setStatus("idle"); setMessage(""); }}>Send another enquiry <Arrow diagonal /></button>
+      </div> : <>
       <div className="quote-form__honeypot" aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
       <div className="quote-form__head"><span>{formHeading}</span><p>{helperText.split("*")[0]}<b>*</b>{helperText.split("*").slice(1).join("*")}</p></div>
 
@@ -181,12 +222,14 @@ export function QuoteForm({ content, directContact }: { content: QuoteFormConten
           <Field name="size" label="Size" optional error={fieldErrors.size}>
             <input name="size" aria-invalid={Boolean(fieldErrors.size)} aria-describedby={fieldErrors.size ? "size-error" : undefined} />
           </Field>
-          <Field name="quantity" label="Quantity" required error={fieldErrors.quantity}>
-            <input name="quantity" required inputMode="decimal" aria-invalid={Boolean(fieldErrors.quantity)} aria-describedby={fieldErrors.quantity ? "quantity-error" : undefined} />
-          </Field>
-          <Field name="unit" label="Unit" required error={fieldErrors.unit}>
-            <select name="unit" defaultValue="Tonnes" required aria-invalid={Boolean(fieldErrors.unit)} aria-describedby={fieldErrors.unit ? "unit-error" : undefined}><option value="Tonnes">Tonnes</option><option value="MT">MT</option><option value="Other">Other</option></select>
-          </Field>
+          <div className="quote-form__quantity-unit">
+            <Field name="quantity" label="Quantity" required error={fieldErrors.quantity}>
+              <input name="quantity" required inputMode="decimal" aria-invalid={Boolean(fieldErrors.quantity)} aria-describedby={fieldErrors.quantity ? "quantity-error" : undefined} />
+            </Field>
+            <Field name="unit" label="Unit" required error={fieldErrors.unit}>
+              <select name="unit" defaultValue="Tonnes" required aria-invalid={Boolean(fieldErrors.unit)} aria-describedby={fieldErrors.unit ? "unit-error" : undefined}><option value="Tonnes">Tonnes</option><option value="MT">MT</option><option value="Other">Other</option></select>
+            </Field>
+          </div>
           <Field name="requirementFrequency" label="Requirement frequency" required error={fieldErrors.requirementFrequency} wide>
             <select name="requirementFrequency" defaultValue="" required aria-invalid={Boolean(fieldErrors.requirementFrequency)} aria-describedby={fieldErrors.requirementFrequency ? "requirementFrequency-error" : undefined}><option value="" disabled>One-time or regular requirement?</option>{enquiryRequirementFrequencies.map((frequency) => <option key={frequency} value={frequency}>{frequency}</option>)}</select>
           </Field>
@@ -200,7 +243,7 @@ export function QuoteForm({ content, directContact }: { content: QuoteFormConten
             <input name="state" required autoComplete="address-level1" aria-invalid={Boolean(fieldErrors.state)} aria-describedby={fieldErrors.state ? "state-error" : undefined} />
           </Field>
           <Field name="pincode" label="Pincode" optional error={fieldErrors.pincode}>
-            <input name="pincode" autoComplete="postal-code" aria-invalid={Boolean(fieldErrors.pincode)} aria-describedby={fieldErrors.pincode ? "pincode-error" : undefined} />
+            <input name="pincode" inputMode="numeric" autoComplete="postal-code" aria-invalid={Boolean(fieldErrors.pincode)} aria-describedby={fieldErrors.pincode ? "pincode-error" : undefined} />
           </Field>
           <Field name="labReport" label="Lab report" optional error={fieldErrors.labReport} wide>
             <input className="quote-form__file" name="labReport" type="file" accept={labReportTypes} aria-invalid={Boolean(fieldErrors.labReport)} aria-describedby={fieldErrors.labReport ? "labReport-error" : "lab-report-help"} />
@@ -213,9 +256,10 @@ export function QuoteForm({ content, directContact }: { content: QuoteFormConten
       <div className="quote-form__submit">
         <button className="button button--dark" type="submit" disabled={status === "submitting" || !canShowRequirement}>{status === "submitting" ? "Sending enquiry" : submitLabel} <Arrow diagonal /></button>
         {!canShowRequirement && <p className="quote-form__progress-note" aria-live="polite">Select your company type and role to continue.</p>}
-        {status !== "idle" && <div className={`quote-form__status quote-form__status--${status}`} role={status === "error" ? "alert" : "status"} aria-live="polite"><p>{message}</p>{status === "success" && <div className="quote-form__direct-contact"><a href={directContact.phoneHref}>Call / enquiry</a><a href={directContact.whatsappHref}>WhatsApp / text</a><a href={directContact.emailHref}>Email</a></div>}</div>}
+        {status !== "idle" && <div className={`quote-form__status quote-form__status--${status}`} role={status === "error" ? "alert" : "status"} aria-live="polite"><p>{message}</p>{status === "error" && <div className="quote-form__direct-contact"><a href={directContact.phoneHref}>Call / enquiry</a><a href={directContact.whatsappHref}>WhatsApp / text</a><a href={directContact.emailHref}>Email</a></div>}</div>}
       </div>
       <p className="quote-form__privacy">By sending this enquiry, you agree that Star Energies may use the submitted information to respond to your requirement. <Link href="/privacy">Privacy</Link></p>
+      </>}
     </form>
   );
 }

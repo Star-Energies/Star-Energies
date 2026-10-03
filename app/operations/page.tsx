@@ -10,7 +10,7 @@ import type { CoverageRegion } from "@/types/content";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
-  return createMetadata((await getOperationsPage()).content.seo);
+  return createMetadata((await getOperationsPage()).content.seo, "/operations");
 }
 
 import { IndiaRouteMap } from "@/components/india-route-map";

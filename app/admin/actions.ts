@@ -1,7 +1,7 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { z } from "zod";
 
 import { requireAdmin, AdminAuthorizationError } from "@/lib/auth";
@@ -91,7 +91,7 @@ function syncWhatsAppContact(settings: SiteSettings): SiteSettings {
 }
 
 function invalidate(tags: readonly string[], paths: readonly string[]) {
-  tags.forEach((tag) => revalidateTag(tag, "max"));
+  tags.forEach((tag) => updateTag(tag));
   paths.forEach((path) => revalidatePath(path));
 }
 

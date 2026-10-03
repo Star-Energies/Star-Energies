@@ -131,6 +131,7 @@ export const productSchema = z.object({
   displayOrder: z.number().int().min(0).max(999),
   consideredAgainst: z.string().min(3).max(100),
   seo: seoMetadataSchema.optional(),
+  updatedAt: z.string().datetime().optional(),
 });
 export type Product = z.infer<typeof productSchema>;
 
@@ -147,6 +148,7 @@ export const industrySchema = z.object({
   status: contentStatusSchema,
   displayOrder: z.number().int().min(0).max(999),
   seo: seoMetadataSchema.optional(),
+  updatedAt: z.string().datetime().optional(),
 });
 export type Industry = z.infer<typeof industrySchema>;
 
@@ -163,6 +165,7 @@ export const capabilitySchema = z.object({
   status: contentStatusSchema,
   displayOrder: z.number().int().min(0).max(999),
   seo: seoMetadataSchema.optional(),
+  updatedAt: z.string().datetime().optional(),
 });
 export type Capability = z.infer<typeof capabilitySchema>;
 

@@ -2,9 +2,9 @@ import { getSessionCookie } from "better-auth/cookies";
 import { NextResponse, type NextRequest } from "next/server";
 
 /**
- * Fast optimistic protection for the console. The admin layout, API handlers,
- * and every server mutation still verify the database-backed administrator
- * role; a cookie alone is never treated as authorization.
+ * Fast optimistic protection for the console. Every admin page (requireAdminPage),
+ * API handler, and server mutation still verifies the database-backed
+ * administrator role; a cookie alone is never treated as authorization.
  */
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;

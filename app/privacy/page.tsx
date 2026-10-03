@@ -7,7 +7,7 @@ import { createMetadata } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
-  return createMetadata((await getPrivacyPage()).seo);
+  return createMetadata((await getPrivacyPage()).seo, "/privacy");
 }
 
 export default async function PrivacyPage() {

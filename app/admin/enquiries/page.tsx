@@ -1,7 +1,9 @@
 import { EnquiriesManager } from "@/components/admin/admin-management";
 import { getAdminEnquiries } from "@/lib/admin-content";
+import { requireAdminPage } from "@/lib/auth";
 
 export default async function AdminEnquiriesPage({ searchParams }: { searchParams: Promise<{ q?: string; status?: string; sort?: string; page?: string }> }) {
+  await requireAdminPage();
   const params = await searchParams;
   const sort = params.sort === "oldest" ? "oldest" : "newest";
   const page = Number.parseInt(params.page ?? "1", 10);

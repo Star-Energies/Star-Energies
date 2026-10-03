@@ -4,6 +4,7 @@ import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { getDatabase } from "@/db";
 import { administrators } from "@/db/schema";
@@ -47,5 +48,12 @@ export async function getAdminSession() {
 export async function requireAdmin() {
   const adminSession = await getAdminSession();
   if (!adminSession) throw new AdminAuthorizationError();
+  return adminSession;
+}
+
+/** Server-side authorization for admin page components: redirects instead of throwing. */
+export async function requireAdminPage() {
+  const adminSession = await getAdminSession();
+  if (!adminSession) redirect("/admin/login");
   return adminSession;
 }

@@ -11,7 +11,10 @@ import { AdminButton, AdminLink, ConfirmDialog, EmptyState, Field, FormSection, 
 type EntityKind = "products" | "industries" | "capabilities";
 type ListItem = Product | Industry | Capability;
 
-const dateLabel = "17 Sep 2026";
+function formatUpdatedAt(value?: string) {
+  if (!value) return "—";
+  return new Date(value).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+}
 
 function ListToolbar({ query, onQuery, status, onStatus, createHref, createLabel }: { query: string; onQuery: (value: string) => void; status: string; onStatus: (value: string) => void; createHref: string; createLabel: string }) {
   return <div className="admin-list-toolbar"><TextInput value={query} onChange={(event) => onQuery(event.target.value)} placeholder="Search entries" aria-label="Search entries" /><SelectInput value={status} onChange={(event) => onStatus(event.target.value)} aria-label="Filter by status"><option value="all">All statuses</option><option value="published">Published</option><option value="draft">Draft</option><option value="inactive">Inactive</option></SelectInput><AdminLink href={createHref} variant="dark">{createLabel}</AdminLink></div>;
@@ -51,7 +54,7 @@ function EntityList({ kind, items }: { kind: EntityKind; items: ListItem[] }) {
       {filtered.length === 0 ? <EmptyState title="No matching entries" body="Adjust the search or status filter, or add a new entry." action={<AdminLink href={`${basePath}/new`} variant="line">{copy.create}</AdminLink>} /> : <div className="admin-table-wrap"><table className="admin-data-table"><thead><tr><th>Name</th><th>{copy.column}</th><th>Featured</th><th>Status</th><th>Order</th><th>Updated</th><th><span className="sr-only">Actions</span></th></tr></thead><tbody>{filtered.map((item) => {
         const name = "title" in item ? item.title : item.name;
         const detail = "sourceType" in item ? item.sourceType ?? "Requirement-led" : "shortDescription" in item ? item.shortDescription : "";
-        return <tr key={item.id}><td><b>{name}</b><small>/{item.slug}</small></td><td><span className="admin-table-detail">{detail}</span></td><td><button className={`admin-feature-toggle ${item.featured ? "is-on" : ""}`} type="button" onClick={() => updateLocal(item.id, "featured", !item.featured)} aria-label={`${item.featured ? "Remove" : "Make"} ${name} featured`}>{item.featured ? "Yes" : "—"}</button></td><td><button type="button" className="admin-status-button" onClick={() => updateLocal(item.id, "active", !item.active)}><StatusBadge status={item.active ? item.status : "inactive"} /></button></td><td>{String(item.displayOrder).padStart(2, "0")}</td><td>{dateLabel}</td><td><Link className="admin-table-edit" href={`${basePath}/${item.id}`}>Edit</Link></td></tr>;
+        return <tr key={item.id}><td><b>{name}</b><small>/{item.slug}</small></td><td><span className="admin-table-detail">{detail}</span></td><td><button className={`admin-feature-toggle ${item.featured ? "is-on" : ""}`} type="button" onClick={() => updateLocal(item.id, "featured", !item.featured)} aria-label={`${item.featured ? "Remove" : "Make"} ${name} featured`}>{item.featured ? "Yes" : "—"}</button></td><td><button type="button" className="admin-status-button" onClick={() => updateLocal(item.id, "active", !item.active)}><StatusBadge status={item.active ? item.status : "inactive"} /></button></td><td>{String(item.displayOrder).padStart(2, "0")}</td><td>{formatUpdatedAt(item.updatedAt)}</td><td><Link className="admin-table-edit" href={`${basePath}/${item.id}`}>Edit</Link></td></tr>;
       })}</tbody></table></div>}
     </section>
   </>;

@@ -129,6 +129,7 @@ function toProduct(record: typeof productRecords.$inferSelect, seo?: SeoMetadata
     displayOrder: record.displayOrder,
     consideredAgainst: record.consideredAgainst,
     seo,
+    updatedAt: record.updatedAt.toISOString(),
   });
 }
 
@@ -152,6 +153,7 @@ function toIndustry(record: typeof industryRecords.$inferSelect, seo?: SeoMetada
     status: record.status,
     displayOrder: record.displayOrder,
     seo,
+    updatedAt: record.updatedAt.toISOString(),
   });
 }
 
@@ -175,6 +177,7 @@ function toCapability(record: typeof capabilityRecords.$inferSelect, seo?: SeoMe
     status: record.status,
     displayOrder: record.displayOrder,
     seo,
+    updatedAt: record.updatedAt.toISOString(),
   });
 }
 

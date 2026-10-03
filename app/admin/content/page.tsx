@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/admin/admin-primitives";
-import { requireAdmin } from "@/lib/auth";
+import { requireAdminPage } from "@/lib/auth";
 
 const pages = [
   { number: "01", title: "Home", href: "/admin/content/home", body: "Hero, sourcing, featured content, facility, quality, experience and final enquiry copy." },
@@ -9,7 +9,7 @@ const pages = [
 ];
 
 export default async function ContentOverviewPage() {
-  await requireAdmin();
+  await requireAdminPage();
   return <>
     <PageHeader eyebrow="WEBSITE CONTENT" title="Edit the approved public pages." description="Content is arranged by real website section. Layout, typography, colour and responsive behaviour remain protected." />
     <section className="admin-content-directory">{pages.map((page) => <Link href={page.href} key={page.href}><span>{page.number}</span><div><h3>{page.title}</h3><p>{page.body}</p></div><i>→</i></Link>)}</section>

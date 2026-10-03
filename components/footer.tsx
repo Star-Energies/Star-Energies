@@ -1,5 +1,3 @@
-"use client";
-
 import { routes } from "@/content/routes";
 import type { SiteSettings } from "@/types/content";
 import Link from "next/link";

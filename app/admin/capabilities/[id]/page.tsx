@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import { CapabilityEditor } from "@/components/admin/catalogue-management";
 import { getAdminCapabilities, getAdminMediaAssets } from "@/lib/content";
+import { requireAdminPage } from "@/lib/auth";
 
 export default async function CapabilityEditPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireAdminPage();
   const { id } = await params;
   const [capabilities, media] = await Promise.all([getAdminCapabilities(), getAdminMediaAssets()]);
   const capability = capabilities.find((item) => item.id === id);

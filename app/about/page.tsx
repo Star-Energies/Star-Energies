@@ -7,7 +7,7 @@ import { createMetadata } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
-  return createMetadata((await getAboutPage()).seo);
+  return createMetadata((await getAboutPage()).seo, "/about");
 }
 
 export default async function AboutPage() {
