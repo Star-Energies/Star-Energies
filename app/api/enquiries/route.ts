@@ -16,6 +16,17 @@ type EnquiryFormData = {
   entries(): IterableIterator<[string, string | File]>;
 };
 
+// Applies only to issues the schema has no hand-written message for, so raw
+// parser wording never reaches a visitor.
+const friendlyIssueMessage: z.core.$ZodErrorMap = (issue) => {
+  const field = String(issue.path?.[0] ?? "");
+  if (field === "clientSubmissionId" || field === "formStartedAt") return "Please refresh the form and try again.";
+  if (issue.code === "too_big") return "This entry is too long.";
+  if (issue.code === "too_small") return "This entry is too short.";
+  if (issue.code === "invalid_value") return "Choose one of the available options.";
+  return "Check this entry and try again.";
+};
+
 function validationResponse(error: z.ZodError) {
   const fields = Object.fromEntries(error.issues.map((issue) => [String(issue.path[0] ?? "form"), issue.message]));
   return NextResponse.json({ ok: false, message: "Please review the highlighted details and try again.", fields }, { status: 422 });
@@ -50,7 +61,7 @@ export async function POST(request: Request) {
   }
 
   const payload = Object.fromEntries([...formData.entries()].filter(([, value]) => typeof value === "string"));
-  const parsed = publicEnquiryRequestSchema.safeParse(payload);
+  const parsed = publicEnquiryRequestSchema.safeParse(payload, { error: friendlyIssueMessage });
   if (!parsed.success) return validationResponse(parsed.error);
 
   // A filled hidden field is treated as a successful no-op, which does not
