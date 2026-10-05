@@ -67,20 +67,21 @@
   .scene-scale { right: 20px; bottom: 17px; font-size: 9px; }
   .hero__brief { order: 5; width: 100%; margin-top: 0; border-top: 0; }
   .hero__brief span { min-height: 43px; display: flex; align-items: center; padding: 0; border-bottom: 1px solid rgba(255,255,255,.24); font-size: 10px; }
+  .hero__brief span:nth-child(odd) { padding-left: 0; border-left: 0; }
   .hero__brief span:nth-child(2n) { padding-left: 15px; border-left: 1px solid rgba(255,255,255,.24); }
   .hero__brief span:nth-child(3) { border-top: 0; }
   .hero__bottom { height: 36px; }
   .hero__bottom span { font-size: 9px; }
 
-  .capability { padding-bottom: 213px; }
+  .capability { padding-bottom: 250px; }
   .capability__main { margin-top: 37px; }
   .capability__main h2 { font-size: clamp(42px, 11.7vw, 53px); }
   .capability__body { margin-top: 25px; font-size: 15px; }
-  .capability-diagram { width: 350px; height: 350px; right: -145px; bottom: -145px; }
+  .capability-diagram { width: 350px; height: 350px; right: -145px; top: auto; bottom: -374px; }
   .capability-diagram__orbit { inset: 46px; }
   .capability-diagram__ring--one { inset: 104px; }
   .capability-diagram__ring--two { inset: 159px; }
-  .capability-diagram__label--one { left: 43px; top: 63px; }
+  .capability-diagram__label--one { left: 134px; top: 9px; }
   .capability-diagram__label--two { right: 57px; bottom: 75px; }
   .requirement__intro h2 { font-size: clamp(39px, 11vw, 49px); }
   .requirement__sequence { margin-top: 38px; }
@@ -127,6 +128,10 @@
   .about-opening__measure strong { font-size: 74px; }
   .about-opening__measure span { max-width: 210px; }
   .about-opening__foot { margin-top: 39px; }
+  .about-opening__grid > .section-label { display: inline-flex; }
+  .page-cta .shell-grid { display: flex; flex-direction: column; align-items: flex-start; }
+  .page-cta .shell-grid > div { align-self: stretch; }
+  .page-cta__text { margin-top: 22px; }
   .about-distinction__copy { margin-top: 32px; }
   .about-distinction__lead { max-width: 340px; font-size: clamp(31px, 8.5vw, 39px); }
   .about-approach__rows { margin-top: 36px; }
@@ -137,6 +142,7 @@
   .coal-intro__title { margin-top: 38px; }
   .coal-intro h1 { font-size: clamp(44px, 12.2vw, 55px); }
   .coal-intro__spec { margin-top: 38px; }
+  .coal-intro__spec b:last-child:nth-child(even) { grid-column: 1 / -1; }
   .coal-flow__steps { display: block; margin-top: 35px; }
   .coal-flow__steps > div { min-height: 0; display: grid; grid-template-columns: 42px minmax(0,1fr); gap: 10px; align-items: start; padding: 19px 0 21px; border: 0; border-top: 1px solid var(--line-light); }
   .coal-flow__steps > div:last-of-type { border-bottom: 1px solid var(--line-light); }
