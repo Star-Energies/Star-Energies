@@ -43,26 +43,6 @@ const KNOWN_REGION_HUBS: Record<string, Omit<HubNode, "id">> = {
     labelDx: -108,
     labelDy: 4,
   },
-  "chandrapur": {
-    x: 252,
-    y: 423,
-    label: "CHANDRAPUR",
-    sub: "Maharashtra",
-    stateId: "mh",
-    bend: 0.16,
-    labelDx: 15,
-    labelDy: 16,
-  },
-  "nagpur": {
-    x: 240,
-    y: 388,
-    label: "NAGPUR",
-    sub: "Maharashtra",
-    stateId: "mh",
-    bend: -0.14,
-    labelDx: 16,
-    labelDy: -7,
-  },
   "telangana-hyderabad": {
     x: 228,
     y: 462,
@@ -126,19 +106,16 @@ export function IndiaRouteMap({
   regions,
   origin = "Wani",
   note,
-  ariaLabel = "Real geographic map of India showing operating supply routes and dispatch corridors from Wani",
+  ariaLabel = "Map of established industrial coal delivery corridors from Wani",
 }: IndiaRouteMapProps) {
   // Origin hub: Wani, Maharashtra (approx. 20.06° N, 78.95° E)
   const originNode = { x: 232, y: 418, name: origin.toUpperCase() };
 
-  // Resolve target nodes from coverage regions data
+  // Resolve delivery-market nodes from coverage regions data.
   const targetNodes: HubNode[] = [];
   const activeStateIds = new Set<string>(["mh"]); // Origin state Maharashtra always active
 
   regions.forEach((region) => {
-    // Wani is already rendered as the central origin hub.
-    if (region.id === "wani") return;
-
     const known = KNOWN_REGION_HUBS[region.id];
     if (known) {
       activeStateIds.add(known.stateId);
@@ -226,7 +203,7 @@ export function IndiaRouteMap({
         })}
       </g>
 
-      {/* Real geographic shape of India: Active operating states highlighted */}
+      {/* Delivery states highlighted */}
       <g className="india-map__states-active">
         {INDIA_STATES.map((state) => {
           if (!activeStateIds.has(state.id)) return null;
@@ -242,7 +219,7 @@ export function IndiaRouteMap({
         })}
       </g>
 
-      {/* Curved supply route corridors connecting Wani Hub to destination industrial regions */}
+      {/* Curved delivery corridors connecting Wani Hub to destination markets */}
       <g className="india-map__routes">
         {targetNodes.map((target) => (
           <path

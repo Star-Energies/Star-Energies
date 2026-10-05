@@ -22,7 +22,7 @@ function OperationsMap({ regions, origin, note }: { regions: readonly CoverageRe
       regions={regions}
       origin={origin}
       note={note}
-      ariaLabel="Diagram showing Star Energies locations in Wani, Chandrapur and Nagpur"
+      ariaLabel="Diagram showing delivery corridors from Wani across Maharashtra, Telangana, Andhra Pradesh, Karnataka and Gujarat"
     />
   );
 }

@@ -6,7 +6,7 @@ import type { OperationsPageContent } from "@/types/content";
 export const operationsPage = {
   seo: {
     title: "Operations | Star Energies",
-    description: "Operating coverage across Wani, Chandrapur and Nagpur, with third-party transport coordination.",
+    description: "Operating locations in Wani, Chandrapur and Nagpur, with delivery routes across regional industrial markets.",
     canonicalPath: routes.operations,
   },
   opening: {
@@ -28,11 +28,11 @@ export const operationsPage = {
     ],
   },
   coverage: {
-    label: "Locations / 03",
-    heading: [{ text: "Three locations", breakAfter: true }, { text: "connected by the work.", emphasis: true }],
-    body: "Star Energies is connected across Wani, Chandrapur and Nagpur in Maharashtra. Supply remains subject to sourcing, availability, logistics and commercial feasibility.",
-    regionIds: ["wani", "chandrapur", "nagpur"],
-    mapNote: "WANI · CHANDRAPUR · NAGPUR",
+    label: "Delivery network / 03",
+    heading: [{ text: "Built locally.", breakAfter: true }, { text: "Moving regionally.", emphasis: true }],
+    body: "Star Energies operates from Wani, Chandrapur and Nagpur, with established delivery markets across Maharashtra, Telangana / Hyderabad, Andhra Pradesh / Visakhapatnam, Karnataka and Gujarat. Supply remains subject to sourcing, availability, logistics and commercial feasibility.",
+    regionIds: ["maharashtra", "telangana-hyderabad", "andhra-visakhapatnam", "karnataka", "gujarat"],
+    mapNote: "ESTABLISHED DELIVERY MARKETS",
   },
   transport: {
     eyebrow: "TRANSPORT COORDINATION / 04",

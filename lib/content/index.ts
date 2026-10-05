@@ -69,7 +69,7 @@ type PageContent =
 
 // `unstable_cache` persists across deployments. Bump this only when a direct
 // CMS migration needs every deployed instance to fetch new published records.
-const CMS_CACHE_VERSION = "2026-10-03-contact-locations";
+const CMS_CACHE_VERSION = "2026-10-05-delivery-network";
 
 async function authorizeAdminRead() {
   const { requireAdmin } = await import("@/lib/auth");

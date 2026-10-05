@@ -7,7 +7,7 @@ import type { HomePageContent } from "@/types/content";
 export const homePage = {
   seo: {
     title: "Star Energies | Industrial Coal, Sourced to Requirement",
-    description: "Requirement-led industrial coal sourcing and supply across Wani, Chandrapur and Nagpur, Maharashtra.",
+    description: "Requirement-led industrial coal sourcing and delivery across Maharashtra, Telangana, Andhra Pradesh, Karnataka and Gujarat.",
     canonicalPath: routes.home,
   },
   hero: {
@@ -91,12 +91,12 @@ export const homePage = {
     footLabels: ["INDUSTRIAL COAL USERS", "APPLICATION-SPECIFIC DISCUSSION WELCOME"],
   },
   coverage: {
-    label: "Locations / 07",
-    heading: "Three locations. One operating network.",
-    body: "Star Energies is connected across Wani, Chandrapur and Nagpur in Maharashtra.",
-    qualification: `${commercialInformation.panIndiaQualification} The diagram shows the three locations connected through the operating network.`,
-    mapNote: "WANI · CHANDRAPUR · NAGPUR",
-    regionIds: ["wani", "chandrapur", "nagpur"],
+    label: "Delivery network / 07",
+    heading: "A regional network, built from Maharashtra.",
+    body: "Star Energies coordinates industrial coal delivery across Maharashtra, Telangana / Hyderabad, Andhra Pradesh / Visakhapatnam, Karnataka and Gujarat.",
+    qualification: `${commercialInformation.panIndiaQualification} The diagram shows established delivery markets; route availability remains specific to each requirement.`,
+    mapNote: "DELIVERY MARKETS / WANI HUB",
+    regionIds: ["maharashtra", "telangana-hyderabad", "andhra-visakhapatnam", "karnataka", "gujarat"],
   },
   facility: {
     label: "Operations / 08",

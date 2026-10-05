@@ -1,9 +1,11 @@
 import type { CoverageRegion, QualityParameter, RequirementDimension } from "@/types/content";
 
 export const coverageRegions = [
-  { id: "wani", name: "Wani", label: "Wani", state: "Maharashtra", cityOrMarket: "Wani", experienceType: "industry-experience", active: true, displayOrder: 1, mapLabel: "WANI" },
-  { id: "chandrapur", name: "Chandrapur", label: "Chandrapur", state: "Maharashtra", cityOrMarket: "Chandrapur", experienceType: "industry-experience", active: true, displayOrder: 2, mapLabel: "CHANDRAPUR" },
-  { id: "nagpur", name: "Nagpur", label: "Nagpur", state: "Maharashtra", cityOrMarket: "Nagpur", experienceType: "industry-experience", active: true, displayOrder: 3, mapLabel: "NAGPUR" },
+  { id: "maharashtra", name: "Maharashtra", label: "Maharashtra", state: "Maharashtra", experienceType: "industry-experience", active: true, displayOrder: 1, mapLabel: "MAHARASHTRA" },
+  { id: "telangana-hyderabad", name: "Telangana / Hyderabad", label: "Telangana / Hyderabad", state: "Telangana", cityOrMarket: "Hyderabad", experienceType: "industry-experience", active: true, displayOrder: 2, mapLabel: "HYDERABAD" },
+  { id: "andhra-visakhapatnam", name: "Andhra Pradesh / Visakhapatnam", label: "Andhra Pradesh / Visakhapatnam", state: "Andhra Pradesh", cityOrMarket: "Visakhapatnam", experienceType: "industry-experience", active: true, displayOrder: 3, mapLabel: "VISAKHAPATNAM" },
+  { id: "karnataka", name: "Karnataka", label: "Karnataka", state: "Karnataka", experienceType: "industry-experience", active: true, displayOrder: 4, mapLabel: "KARNATAKA" },
+  { id: "gujarat", name: "Gujarat", label: "Gujarat", state: "Gujarat", experienceType: "industry-experience", active: true, displayOrder: 5, mapLabel: "GUJARAT" },
 ] satisfies CoverageRegion[];
 
 export const qualityParameters = [
